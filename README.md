@@ -37,4 +37,3 @@ lib/
 | Audio | audioplayers |
 | Navigasi | page_transition |
 | API | [AlQuran Cloud](https://alquran.cloud/api) |
-| Audio CDN | islamic.network |
