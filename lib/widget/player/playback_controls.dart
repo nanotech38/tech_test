@@ -5,6 +5,8 @@ import '../../model/surah_model.dart';
 class PlaybackControls extends StatelessWidget {
   final SurahModel surah;
   final bool isPlaying;
+  final bool canPrevious;
+  final bool canNext;
   final VoidCallback onPlayPause;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
@@ -16,6 +18,8 @@ class PlaybackControls extends StatelessWidget {
     required this.onPlayPause,
     required this.onPrevious,
     required this.onNext,
+    this.canPrevious = true,
+    this.canNext = true,
   });
 
   @override
@@ -24,10 +28,13 @@ class PlaybackControls extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         IconButton(
-          icon: const Icon(Icons.skip_previous_rounded),
-          color: kWhite,
+          icon: Icon(
+            Icons.skip_previous_rounded,
+            // redup jika sudah di ayah pertama
+            color: canPrevious ? kWhite : kWhite24,
+          ),
           iconSize: 44,
-          onPressed: onPrevious,
+          onPressed: canPrevious ? onPrevious : null,
         ),
         GestureDetector(
           onTap: onPlayPause,
@@ -39,7 +46,7 @@ class PlaybackControls extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: surah.color.withOpacity(0.5),
+                  color: surah.color.withValues(alpha: 0.5),
                   blurRadius: 24,
                   spreadRadius: 2,
                 ),
@@ -53,10 +60,13 @@ class PlaybackControls extends StatelessWidget {
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.skip_next_rounded),
-          color: kWhite,
+          icon: Icon(
+            Icons.skip_next_rounded,
+            // redup jika sudah di ayah terakhir
+            color: canNext ? kWhite : kWhite24,
+          ),
           iconSize: 44,
-          onPressed: onNext,
+          onPressed: canNext ? onNext : null,
         ),
       ],
     );

@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(() => setState(() {}));
   }
 
   @override
@@ -52,19 +51,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // function fitur search
-  List<SurahModel> _filtered(List<SurahModel> items) {
-    final query = _searchController.text.toLowerCase();
-    if (identical(_lastItems, items) && query == _lastQuery) {
+  List<SurahModel> _filtered(List<SurahModel> items, String query) {
+    final q = query.toLowerCase();
+    if (identical(_lastItems, items) && q == _lastQuery) {
       return _cachedFiltered;
     }
-    _lastQuery = query;
+    _lastQuery = q;
     _lastItems = items;
-    _cachedFiltered = query.isEmpty
+    _cachedFiltered = q.isEmpty
         ? items
         : items.where((s) {
-            return s.title.toLowerCase().contains(query) ||
-                s.translation.toLowerCase().contains(query) ||
-                s.arabicName.contains(query);
+            return s.title.toLowerCase().contains(q) ||
+                s.translation.toLowerCase().contains(q) ||
+                s.arabicName.contains(q);
           }).toList();
     return _cachedFiltered;
   }
@@ -106,34 +105,45 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
 
-                  final filtered = _filtered(state.items);
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                        child: Text(
-                          '${filtered.length} surahs',
-                          style: const TextStyle(color: kWhite38, fontSize: 13),
-                        ),
-                      ),
-                      Expanded(
-                        child: filtered.isEmpty
-                            ? const SurahEmptyState()
-                            : ListView.builder(
-                          itemCount: filtered.length,
-                          itemBuilder: (context, index) {
-                            final surah = filtered[index];
-                            return SurahTitle(
-                              surah: surah,
-                              isActive: state.currentSurah?.id == surah.id,
-                              onTap: () => _openPlayer(surah),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+                  // ValueListenableBuilder hanya rebuild list saat teks search berubah
+                  // bukan rebuild seluruh HomeScreen
+                  return ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: _searchController,
+                    builder: (context, textValue, _) {
+                      final filtered = _filtered(state.items, textValue.text);
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                            child: Text(
+                              '${filtered.length} surahs',
+                              style: const TextStyle(
+                                color: kWhite38,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: filtered.isEmpty
+                                ? const SurahEmptyState()
+                                : ListView.builder(
+                                    itemCount: filtered.length,
+                                    itemBuilder: (context, index) {
+                                      final surah = filtered[index];
+                                      return SurahTitle(
+                                        surah: surah,
+                                        isActive:
+                                            state.currentSurah?.number ==
+                                            surah.number,
+                                        onTap: () => _openPlayer(surah),
+                                      );
+                                    },
+                                  ),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
               ),

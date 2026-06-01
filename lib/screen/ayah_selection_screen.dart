@@ -50,6 +50,7 @@ class AyahSelectionScreen extends StatelessWidget {
                   const Text('Failed to load ayahs', style: TextStyle(color: kWhite54)),
                   const SizedBox(height: 16),
                   TextButton.icon(
+                    // load ulang kalau gagal
                     onPressed: () => context.read<AyahCubit>().loadAyahs(surah.number),
                     icon: const Icon(Icons.refresh_rounded, color: kWhite54),
                     label: const Text('Retry', style: TextStyle(color: kWhite54)),
@@ -67,7 +68,11 @@ class AyahSelectionScreen extends StatelessWidget {
               return AyahTitle(
                 ayah: ayah,
                 onTap: () => NavigationService.get().push(
-                  PlayerScreen(surah: surah, ayah: ayah),
+                  PlayerScreen(
+                    surah: surah,
+                    ayahs: state.items,
+                    initialIndex: index,
+                  ),
                 ),
               );
             },

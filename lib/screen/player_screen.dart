@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_test/const/app_theme_const.dart';
@@ -9,9 +10,15 @@ import 'package:tech_test/widget/player/playback_controls.dart';
 
 class PlayerScreen extends StatefulWidget {
   final SurahModel surah;
-  final AyahModel ayah;
+  final List<AyahModel> ayahs;
+  final int initialIndex;
 
-  const PlayerScreen({super.key, required this.surah, required this.ayah});
+  const PlayerScreen({
+    super.key,
+    required this.surah,
+    required this.ayahs,
+    required this.initialIndex,
+  });
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
@@ -19,22 +26,38 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   final AudioPlayer _player = AudioPlayer();
+  late int _currentIndex;
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
   bool _isReady = false;
+  bool _isChanging = false;
+
+  // subscription disimpan agar bisa di-cancel di dispose
+  late final StreamSubscription _durationSub;
+  late final StreamSubscription _positionSub;
+  late final StreamSubscription _stateSub;
+
+  AyahModel get _currentAyah => widget.ayahs[_currentIndex];
+  bool get _canPrevious => _currentIndex > 0;
+  bool get _canNext => _currentIndex < widget.ayahs.length - 1;
 
   @override
   void initState() {
     super.initState();
-    _player.onDurationChanged.listen((d) {
+    _currentIndex = widget.initialIndex;
+    _durationSub = _player.onDurationChanged.listen((d) {
       if (mounted) setState(() => _duration = d);
     });
-    _player.onPositionChanged.listen((p) {
+    _positionSub = _player.onPositionChanged.listen((p) {
       if (mounted) setState(() => _position = p);
     });
-    _player.onPlayerStateChanged.listen((state) {
+    _stateSub = _player.onPlayerStateChanged.listen((state) {
       if (mounted && state == PlayerState.playing && !_isReady) {
         setState(() => _isReady = true);
+      }
+      // Auto next ayah saat playback selesai
+      if (mounted && state == PlayerState.completed && _canNext) {
+        _changeAyah(_currentIndex + 1);
       }
     });
     _loadAudio();
@@ -42,8 +65,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   Future<void> _loadAudio() async {
     try {
-      debugPrint('PlayerScreen: loading ${widget.ayah.audioUrl}');
-      await _player.play(UrlSource(widget.ayah.audioUrl));
+      debugPrint('PlayerScreen: loading ${_currentAyah.audioUrl}');
+      await _player.play(UrlSource(_currentAyah.audioUrl));
       debugPrint('PlayerScreen: play called');
     } catch (e, s) {
       debugPrint('PlayerScreen: audio error=$e');
@@ -52,13 +75,35 @@ class _PlayerScreenState extends State<PlayerScreen> {
     }
   }
 
+  // Stop player, reset state, lalu load ayah baru
+  // _isChanging untuk mencegah jika tombol prev/next dipanggil terlalu cepat
+  Future<void> _changeAyah(int newIndex) async {
+    if (_isChanging) return;
+    _isChanging = true;
+    try {
+      await _player.stop();
+      setState(() {
+        _currentIndex = newIndex;
+        _isReady = false;
+        _duration = Duration.zero;
+        _position = Duration.zero;
+      });
+      await _loadAudio();
+    } finally {
+      _isChanging = false;
+    }
+  }
+
   @override
   void dispose() {
+    _durationSub.cancel();
+    _positionSub.cancel();
+    _stateSub.cancel();
     _player.dispose();
     super.dispose();
   }
 
-  String _fmt(Duration d) {
+  String _formatProgress(Duration d) {
     final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
     final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
     return '$m:$s';
@@ -67,7 +112,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   Widget build(BuildContext context) {
     final surah = widget.surah;
-    final ayah = widget.ayah;
+    final ayah = _currentAyah;
 
     return Scaffold(
       backgroundColor: kBgPrimary,
@@ -177,6 +222,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     return Column(
       key: const ValueKey('controls'),
       children: [
+        // Progress Slider
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 3,
@@ -211,11 +257,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _fmt(_position),
+                _formatProgress(_position),
                 style: const TextStyle(color: kWhite38, fontSize: 13),
               ),
               Text(
-                _fmt(_duration),
+                _formatProgress(_duration),
                 style: const TextStyle(color: kWhite38, fontSize: 13),
               ),
             ],
@@ -226,14 +272,17 @@ class _PlayerScreenState extends State<PlayerScreen> {
         // Playback Controls
         StreamBuilder<PlayerState>(
           stream: _player.onPlayerStateChanged,
+          initialData: _player.state,
           builder: (context, snapshot) {
             final isPlaying = snapshot.data == PlayerState.playing;
             return PlaybackControls(
               surah: surah,
               isPlaying: isPlaying,
+              canPrevious: _canPrevious,
+              canNext: _canNext,
               onPlayPause: () => isPlaying ? _player.pause() : _player.resume(),
-              onPrevious: () {},
-              onNext: () {},
+              onPrevious: () => _changeAyah(_currentIndex - 1),
+              onNext: () => _changeAyah(_currentIndex + 1),
             );
           },
         ),

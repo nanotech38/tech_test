@@ -10,11 +10,10 @@ class SurahModel {
   final Color color;
 
   // getter untuk UI
-  String get id         => number.toString();
-  String get title      => englishName;
+  String get title => englishName;
   String get arabicName => name;
   String get translation => englishNameTranslation;
-  String get duration   => '$numberOfAyahs ayat';
+  String get duration => '$numberOfAyahs ayat';
 
   const SurahModel({
     required this.number,
