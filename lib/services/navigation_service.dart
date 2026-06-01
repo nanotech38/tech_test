@@ -21,6 +21,7 @@ class NavigationService {
         .push(PageTransition(type: PageTransitionType.fade, child: screenWidget));
   }
 
+  // route sekarang dihapus -> next page
   Future<dynamic> pushReplacement(Widget screenWidget) {
     debugPrint('[$tag] pushReplacement: ${screenWidget.runtimeType.toString()}');
     return navigatorKey.currentState!.pushReplacement(PageTransition(
@@ -30,6 +31,7 @@ class NavigationService {
         child: screenWidget));
   }
 
+  // Hapus semua route -> next page
   Future<dynamic> pushAndRemoveAll(Widget screenWidget) {
     debugPrint('[$tag] pushAndRemoveAll: ${screenWidget.runtimeType.toString()}');
     return navigatorKey.currentState!.pushAndRemoveUntil(
@@ -37,6 +39,7 @@ class NavigationService {
             (Route<dynamic> route) => false);
   }
 
+  // Hapus semua route kecuali halaman pertama (home) -> next page
   Future<dynamic> pushAndRemoveUntilHome(Widget screenWidget) {
     debugPrint('[$tag] pushAndRemoveUntilHome: ${screenWidget.runtimeType.toString()}');
     return navigatorKey.currentState!.pushAndRemoveUntil(
@@ -52,6 +55,7 @@ class NavigationService {
     return navigatorKey.currentState!.pop(result);
   }
 
+  // Kembali terus sampai di halaman pertama (home)
   void popUntilHome() {
     debugPrint('[$tag] popUntilHome');
     return navigatorKey.currentState!.popUntil((Route<dynamic> route) {
@@ -62,6 +66,7 @@ class NavigationService {
     });
   }
 
+  // Tutup aplikasi sepenuhnya
   void killApps(){
     if (Platform.isAndroid) {
       try {

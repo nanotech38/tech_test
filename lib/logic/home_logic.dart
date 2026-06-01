@@ -1,6 +1,7 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import '../const/app_trx_const.dart';
 import '../model/surah_model.dart';
+import '../services/apps_network_service.dart';
 
 class HomeLogic {
   static const tag = 'HomeLogic';
@@ -10,15 +11,22 @@ class HomeLogic {
 
   HomeLogic._();
 
+  // GET list semua surah dari api dan taruh di model
   Future<List<SurahModel>> fetchSurahList() async {
-    final response = await http.get(
-      Uri.parse('https://api.alquran.cloud/v1/surah'),
-    );
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
+    debugPrint('[$tag] fetchSurahList: start');
+    try {
+      final json = await AppsNetworkService.get().fetch(kSurah);
       final List data = json['data'];
-      return data.map((e) => SurahModel.fromJson(e)).toList();
+      debugPrint('[$tag] fetchSurahList: total=${data.length}');
+      return data
+          .asMap()
+          .entries
+          .map((e) => SurahModel.fromJson(e.value, e.key))
+          .toList();
+    } catch (e, s) {
+      debugPrint('[$tag] fetchSurahList: error=$e');
+      debugPrint('[$tag] fetchSurahList: stack=$s');
+      rethrow;
     }
-    throw Exception('Failed to load: ${response.statusCode}');
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../model/song.dart';
+import '../../const/app_theme_const.dart';
+import '../../model/surah_model.dart';
 
 class MiniPlayer extends StatelessWidget {
-  final Song song;
+  final SurahModel surah;
   final VoidCallback onTap;
 
-  const MiniPlayer({super.key, required this.song, required this.onTap});
+  const MiniPlayer({super.key, required this.surah, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +14,8 @@ class MiniPlayer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFF1E1E1E),
-          border: Border(top: BorderSide(color: Colors.white12)),
+          color: kBgSecondary,
+          border: Border(top: BorderSide(color: kWhite12)),
         ),
         padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
         child: Row(
@@ -23,10 +24,10 @@ class MiniPlayer extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: song.color.withOpacity(0.25),
+                color: surah.color.withOpacity(0.25),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(Icons.music_note_rounded, color: song.color, size: 22),
+              child: Icon(Icons.music_note_rounded, color: surah.color, size: 22),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -35,29 +36,22 @@ class MiniPlayer extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    song.title,
+                    surah.title,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: kWhite,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                    song.artist,
-                    style: const TextStyle(color: Colors.white38, fontSize: 12),
-                  ),
+                  Text(surah.translation, style: const TextStyle(color: kWhite38, fontSize: 12)),
                 ],
               ),
             ),
-            IconButton(
-              icon: const Icon(
-                Icons.pause_circle_filled_rounded,
-                color: Colors.white,
-                size: 38,
-              ),
-              onPressed: () {},
+            const IconButton(
+              icon: Icon(Icons.pause_circle_filled_rounded, color: kWhite, size: 38),
+              onPressed: null,
             ),
           ],
         ),

@@ -1,17 +1,40 @@
-# tech_test
+# Tech Test — Quran Player App
 
-technical test app for submission.
+Aplikasi mobile untuk mendengarkan audio Al-Quran per ayah. Pengguna dapat mencari surah, memilih ayah, dan memutarnya dengan kontrol play/pause serta progress bar.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Fitur
 
-A few resources to get you started if this is your first Flutter project:
+- Daftar 114 surah dari API AlQuran Cloud
+- Pencarian surah berdasarkan nama
+- Pemilihan ayah per surah
+- Pemutar audio per ayah dengan progress bar dan seeking
+- Indikasi loading saat audio sedang disiapkan
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Struktur Folder
+
+```
+lib/
+├── const/      # Variable hardcode aplikasi
+├── bloc/       # State management (BLoC/Cubit)
+├── logic/      # Proses dan bisnis logika aplikasi
+├── model/      # Struktur model data
+├── screen/     # Halaman UI aplikasi
+├── services/   # Template layanan yang digunakan oleh logic
+└── widget/     # Widget yang dipakai berulang kali
+```
+
+## Tech Stack
+
+| | |
+|---|---|
+| Framework | Flutter |
+| State Management | flutter_bloc (Cubit) |
+| HTTP | http + IOClient |
+| Audio | audioplayers |
+| Navigasi | page_transition |
+| API | [AlQuran Cloud](https://alquran.cloud/api) |
+| Audio CDN | islamic.network |

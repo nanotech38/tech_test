@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../const/app_theme_const.dart';
 
-class SongSearchBar extends StatelessWidget {
+class SurahSearchBar extends StatelessWidget {
   final TextEditingController controller;
 
-  const SongSearchBar({super.key, required this.controller});
+  const SurahSearchBar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -11,19 +12,19 @@ class SongSearchBar extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       child: TextField(
         controller: controller,
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: kWhite),
         decoration: InputDecoration(
-          hintText: 'Search songs or artist...',
-          hintStyle: const TextStyle(color: Colors.white38),
-          prefixIcon: const Icon(Icons.search, color: Colors.white38),
+          hintText: 'Search Surah',
+          hintStyle: const TextStyle(color: kWhite38),
+          prefixIcon: const Icon(Icons.search, color: kWhite38),
           suffixIcon: controller.text.isNotEmpty
               ? IconButton(
-                  icon: const Icon(Icons.clear, color: Colors.white38),
+                  icon: const Icon(Icons.clear, color: kWhite38),
                   onPressed: controller.clear,
                 )
               : null,
           filled: true,
-          fillColor: const Color(0xFF1E1E1E),
+          fillColor: kBgSecondary,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,

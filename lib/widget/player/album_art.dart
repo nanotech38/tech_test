@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../model/song.dart';
+import '../../const/app_theme_const.dart';
+import '../../model/surah_model.dart';
 
 class AlbumArt extends StatelessWidget {
-  final Song song;
+  final SurahModel surah;
 
-  const AlbumArt({super.key, required this.song});
+  const AlbumArt({super.key, required this.surah});
 
   @override
   Widget build(BuildContext context) {
@@ -14,26 +15,22 @@ class AlbumArt extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: RadialGradient(
           colors: [
-            song.color.withOpacity(0.7),
-            song.color.withOpacity(0.15),
-            const Color(0xFF181818),
+            surah.color.withOpacity(0.7),
+            surah.color.withOpacity(0.15),
+            kBgTertiary,
           ],
           radius: 0.85,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: song.color.withOpacity(0.35),
+            color: surah.color.withOpacity(0.35),
             blurRadius: 48,
             spreadRadius: 4,
           ),
         ],
       ),
-      child: Icon(
-        Icons.music_note_rounded,
-        size: 100,
-        color: Colors.white.withOpacity(0.6),
-      ),
+      child: Icon(Icons.music_note_rounded, size: 100, color: kWhite.withOpacity(0.6)),
     );
   }
 }

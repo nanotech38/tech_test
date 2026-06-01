@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../const/app_theme_const.dart';
 
-class SongEmptyState extends StatelessWidget {
-  const SongEmptyState({super.key});
+class SurahEmptyState extends StatelessWidget {
+  const SurahEmptyState({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,11 +10,11 @@ class SongEmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.music_off_rounded, color: Colors.white12, size: 72),
+          Icon(Icons.music_off_rounded, color: kWhite12, size: 72),
           SizedBox(height: 16),
           Text(
-            'No songs found',
-            style: TextStyle(color: Colors.white24, fontSize: 16),
+            'No Surah found',
+            style: TextStyle(color: kWhite24, fontSize: 16),
           ),
         ],
       ),
