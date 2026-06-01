@@ -18,10 +18,10 @@ class AyahState {
   });
 
   AyahState.init()
-      : this(inLoading: false, rc: '', errorMsg: '', items: const []);
+    : this(inLoading: false, rc: '', errorMsg: '', items: const []);
 
   AyahState.loading()
-      : this(inLoading: true, rc: '', errorMsg: '', items: const []);
+    : this(inLoading: true, rc: '', errorMsg: '', items: const []);
 
   AyahState.done({
     required String rc,

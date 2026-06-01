@@ -21,13 +21,23 @@ class AyahSelectionScreen extends StatelessWidget {
         backgroundColor: kBgPrimary,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: kWhite, size: 32),
+          icon: const Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: kWhite,
+            size: 32,
+          ),
           onPressed: () => NavigationService.get().pop(),
         ),
         title: Column(
           children: [
-            Text(surah.title, style: const TextStyle(color: kWhite, fontSize: 16)),
-            Text(surah.translation, style: const TextStyle(color: kWhite54, fontSize: 12)),
+            Text(
+              surah.title,
+              style: const TextStyle(color: kWhite, fontSize: 16),
+            ),
+            Text(
+              surah.translation,
+              style: const TextStyle(color: kWhite54, fontSize: 12),
+            ),
           ],
         ),
         centerTitle: true,
@@ -47,13 +57,20 @@ class AyahSelectionScreen extends StatelessWidget {
                 children: [
                   const Icon(Icons.wifi_off_rounded, color: kWhite24, size: 64),
                   const SizedBox(height: 16),
-                  const Text('Failed to load ayahs', style: TextStyle(color: kWhite54)),
+                  const Text(
+                    'Failed to load ayahs',
+                    style: TextStyle(color: kWhite54),
+                  ),
                   const SizedBox(height: 16),
                   TextButton.icon(
                     // load ulang kalau gagal
-                    onPressed: () => context.read<AyahCubit>().loadAyahs(surah.number),
+                    onPressed: () =>
+                        context.read<AyahCubit>().loadAyahs(surah.number),
                     icon: const Icon(Icons.refresh_rounded, color: kWhite54),
-                    label: const Text('Retry', style: TextStyle(color: kWhite54)),
+                    label: const Text(
+                      'Retry',
+                      style: TextStyle(color: kWhite54),
+                    ),
                   ),
                 ],
               ),
@@ -62,7 +79,8 @@ class AyahSelectionScreen extends StatelessWidget {
 
           return ListView.separated(
             itemCount: state.items.length,
-            separatorBuilder: (_, _) => const Divider(color: kWhite12, height: 1),
+            separatorBuilder: (_, _) =>
+                const Divider(color: kWhite12, height: 1),
             itemBuilder: (context, index) {
               final ayah = state.items[index];
               return AyahTitle(

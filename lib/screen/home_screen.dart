@@ -148,7 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            // MiniPlayer hanya rebuild saat currentSurah berubah
             BlocBuilder<HomeCubit, HomeState>(
               buildWhen: (prev, curr) => prev.currentSurah != curr.currentSurah,
               builder: (context, state) {

@@ -22,9 +22,7 @@ class AppsNetworkService {
     return IOClient(ioClient);
   }
 
-  Map<String, String> get _getHeaders => {
-    'Accept': 'application/json',
-  };
+  Map<String, String> get _getHeaders => {'Accept': 'application/json'};
 
   Future<Map<String, dynamic>> fetch(String endpoint, {int retries = 2}) async {
     debugPrint('[$tag] GET $endpoint');
@@ -34,7 +32,9 @@ class AppsNetworkService {
         final response = await client
             .get(Uri.parse('$_baseUrl$endpoint'), headers: _getHeaders)
             .timeout(_timeout);
-        debugPrint('[$tag] GET $endpoint → ${response.statusCode} (attempt $attempt)');
+        debugPrint(
+          '[$tag] GET $endpoint → ${response.statusCode} (attempt $attempt)',
+        );
         return _handleResponse(response);
       } on TimeoutException catch (e) {
         debugPrint('[$tag] GET $endpoint timeout (attempt $attempt): $e');

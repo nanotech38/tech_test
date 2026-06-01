@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tech_test/const/app_rc_const.dart';
-import '../logic/home_logic.dart';
-import '../model/surah_model.dart';
+import 'package:tech_test/logic/home_logic.dart';
+import 'package:tech_test/model/surah_model.dart';
 
 class HomeState {
   final bool inLoading;
@@ -20,10 +20,10 @@ class HomeState {
   });
 
   HomeState.init()
-      : this(inLoading: false, rc: '', errorMsg: '', items: const []);
+    : this(inLoading: false, rc: '', errorMsg: '', items: const []);
 
   HomeState.loading()
-      : this(inLoading: true, rc: '', errorMsg: '', items: const []);
+    : this(inLoading: true, rc: '', errorMsg: '', items: const []);
 
   HomeState.done({
     required String rc,
@@ -32,12 +32,12 @@ class HomeState {
   }) : this(inLoading: false, rc: rc, errorMsg: errorMsg, items: items);
 
   HomeState copyWith({SurahModel? currentSurah}) => HomeState(
-        inLoading: inLoading,
-        rc: rc,
-        errorMsg: errorMsg,
-        items: items,
-        currentSurah: currentSurah,
-      );
+    inLoading: inLoading,
+    rc: rc,
+    errorMsg: errorMsg,
+    items: items,
+    currentSurah: currentSurah,
+  );
 }
 
 class HomeCubit extends Cubit<HomeState> {
@@ -59,6 +59,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  // menyimpan state surah yang sedang di play, buat menampilkan mini-plauyer di homeScreen dan indikator di SurahTitle
   void selectSurah(SurahModel surah) {
     emit(state.copyWith(currentSurah: surah));
   }
