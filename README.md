@@ -14,6 +14,14 @@ Aplikasi mobile untuk mendengarkan audio Al-Quran per ayah. Pengguna dapat menca
 
 ---
 
+## Screenshots
+
+| Home | Search | Ayah List | Player |
+|---|---|---|---|
+| ![Home Screen](assets/app_sample/tech_test_1.jpeg) | ![Search](assets/app_sample/tech_test_2.jpeg) | ![Ayah List](assets/app_sample/tech_test_3.jpeg) | ![Player](assets/app_sample/tech_test_4.jpeg) |
+
+---
+
 ## Struktur Folder
 
 ```
