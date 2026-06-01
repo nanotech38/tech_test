@@ -4,9 +4,15 @@ import '../../model/surah_model.dart';
 
 class MiniPlayer extends StatelessWidget {
   final SurahModel surah;
+  final bool isPlaying;
   final VoidCallback onTap;
 
-  const MiniPlayer({super.key, required this.surah, required this.onTap});
+  const MiniPlayer({
+    super.key,
+    required this.surah,
+    required this.isPlaying,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +30,14 @@ class MiniPlayer extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: surah.color.withOpacity(0.25),
+                color: surah.color.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(Icons.music_note_rounded, color: surah.color, size: 22),
+              child: Icon(
+                isPlaying ? Icons.equalizer_rounded : Icons.music_note_rounded,
+                color: surah.color,
+                size: 22,
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -45,13 +55,19 @@ class MiniPlayer extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(surah.translation, style: const TextStyle(color: kWhite38, fontSize: 12)),
+                  Text(
+                    surah.translation,
+                    style: const TextStyle(color: kWhite38, fontSize: 12),
+                  ),
                 ],
               ),
             ),
-            const IconButton(
-              icon: Icon(Icons.pause_circle_filled_rounded, color: kWhite, size: 38),
-              onPressed: null,
+            Icon(
+              isPlaying
+                  ? Icons.pause_circle_filled_rounded
+                  : Icons.play_circle_filled_rounded,
+              color: kWhite,
+              size: 38,
             ),
           ],
         ),

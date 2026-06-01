@@ -6,7 +6,6 @@ import 'package:tech_test/const/app_rc_const.dart';
 import 'package:tech_test/const/app_theme_const.dart';
 import 'package:tech_test/model/surah_model.dart';
 import 'package:tech_test/services/navigation_service.dart';
-import 'package:tech_test/widget/homepage/mini_player.dart';
 import 'package:tech_test/widget/homepage/surah_empty_state.dart';
 import 'package:tech_test/widget/homepage/surah_error_state.dart';
 import 'package:tech_test/widget/homepage/surah_search_bar.dart';
@@ -105,8 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
 
-                  // ValueListenableBuilder hanya rebuild list saat teks search berubah
-                  // bukan rebuild seluruh HomeScreen
+                  // ValueListenableBuilder hanya rebuild list saat teks search berubah bukan rebuild seluruh HomeScreen
                   return ValueListenableBuilder<TextEditingValue>(
                     valueListenable: _searchController,
                     builder: (context, textValue, _) {
@@ -147,16 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-            ),
-            BlocBuilder<HomeCubit, HomeState>(
-              buildWhen: (prev, curr) => prev.currentSurah != curr.currentSurah,
-              builder: (context, state) {
-                if (state.currentSurah == null) return const SizedBox.shrink();
-                return MiniPlayer(
-                  surah: state.currentSurah!,
-                  onTap: () => _openPlayer(state.currentSurah!),
-                );
-              },
             ),
           ],
         ),

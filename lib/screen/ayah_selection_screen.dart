@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tech_test/bloc/ayah_cubit.dart';
+import 'package:tech_test/bloc/home_cubit.dart';
 import 'package:tech_test/const/app_rc_const.dart';
 import 'package:tech_test/const/app_theme_const.dart';
 import 'package:tech_test/model/surah_model.dart';
@@ -77,6 +78,9 @@ class AyahSelectionScreen extends StatelessWidget {
             );
           }
 
+          // baca lastAyahNumber dari HomeCubit untuk highlight ayah terakhir
+          final lastAyahNumber = context.watch<HomeCubit>().state.lastAyahNumber;
+
           return ListView.separated(
             itemCount: state.items.length,
             separatorBuilder: (_, _) =>
@@ -85,6 +89,7 @@ class AyahSelectionScreen extends StatelessWidget {
               final ayah = state.items[index];
               return AyahTitle(
                 ayah: ayah,
+                isActive: ayah.numberInSurah == lastAyahNumber,
                 onTap: () => NavigationService.get().push(
                   PlayerScreen(
                     surah: surah,

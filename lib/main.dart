@@ -13,13 +13,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Surah Player',
-      debugShowCheckedModeBanner: false,
-      navigatorKey: NavigationService.get().navigatorKey,
-      home: BlocProvider(
-        create: (_) => HomeCubit()..loadSurah(),
-        child: const HomeScreen(),
+    return BlocProvider(
+      create: (_) => HomeCubit()..loadSurah(),
+      child: MaterialApp(
+        title: 'Surah Player',
+        debugShowCheckedModeBanner: false,
+        navigatorKey: NavigationService.get().navigatorKey,
+        home: const HomeScreen(),
       ),
     );
   }

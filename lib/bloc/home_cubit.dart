@@ -10,6 +10,7 @@ class HomeState {
   final String errorMsg;
   final List<SurahModel> items;
   final SurahModel? currentSurah;
+  final int? lastAyahNumber;
 
   HomeState({
     required this.inLoading,
@@ -17,6 +18,7 @@ class HomeState {
     required this.errorMsg,
     required this.items,
     this.currentSurah,
+    this.lastAyahNumber,
   });
 
   HomeState.init()
@@ -31,12 +33,13 @@ class HomeState {
     required List<SurahModel> items,
   }) : this(inLoading: false, rc: rc, errorMsg: errorMsg, items: items);
 
-  HomeState copyWith({SurahModel? currentSurah}) => HomeState(
+  HomeState copyWith({SurahModel? currentSurah, int? lastAyahNumber}) => HomeState(
     inLoading: inLoading,
     rc: rc,
     errorMsg: errorMsg,
     items: items,
-    currentSurah: currentSurah,
+    currentSurah: currentSurah ?? this.currentSurah,
+    lastAyahNumber: lastAyahNumber ?? this.lastAyahNumber,
   );
 }
 
@@ -59,8 +62,13 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  // menyimpan state surah yang sedang di play, buat menampilkan mini-plauyer di homeScreen dan indikator di SurahTitle
+  // menyimpan surah yang sedang aktif untuk highlight di HomeScreen
   void selectSurah(SurahModel surah) {
     emit(state.copyWith(currentSurah: surah));
+  }
+
+  // menyimpan ayah terakhir yang diputar untuk highlight di AyahSelectionScreen
+  void selectAyah(int ayahNumber) {
+    emit(state.copyWith(lastAyahNumber: ayahNumber));
   }
 }

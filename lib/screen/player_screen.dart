@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tech_test/bloc/home_cubit.dart';
 import 'package:tech_test/const/app_theme_const.dart';
 import 'package:tech_test/model/ayah_model.dart';
 import 'package:tech_test/model/surah_model.dart';
@@ -45,6 +47,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
+    // simpan ayah pertama yang dibuka
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeCubit>().selectAyah(_currentAyah.numberInSurah);
+    });
     _durationSub = _player.onDurationChanged.listen((d) {
       if (mounted) setState(() => _duration = d);
     });
@@ -80,6 +86,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Future<void> _changeAyah(int newIndex) async {
     if (_isChanging) return;
     _isChanging = true;
+    // simpan cubit sebelum async gap
+    final homeCubit = context.read<HomeCubit>();
     try {
       await _player.stop();
       setState(() {
@@ -88,6 +96,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
         _duration = Duration.zero;
         _position = Duration.zero;
       });
+      // update ayah terakhir yang diputar
+      homeCubit.selectAyah(_currentAyah.numberInSurah);
       await _loadAudio();
     } finally {
       _isChanging = false;
